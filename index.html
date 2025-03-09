@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Color Translator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+        }
+        #color-box {
+            width: 100px;
+            height: 50px;
+            margin: 20px auto;
+            border: 1px solid #000;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>🎨 Universal Color Translator</h2>
+    <p>Enter a color name and get its Hex code.</p>
+    
+    <input type="text" id="colorInput" placeholder="Enter color name">
+    <button onclick="translateColor()">Translate</button>
+    
+    <h3 id="result"></h3>
+    <div id="color-box"></div>
+
+    <script>
+        function translateColor() {
+            const colorName = document.getElementById("colorInput").value.toLowerCase();
+            const testElement = document.createElement("div");
+            testElement.style.color = colorName;
+
+            if (testElement.style.color) {
+                document.body.appendChild(testElement);
+                const hexCode = window.getComputedStyle(testElement).color;
+                document.body.removeChild(testElement);
+
+                const rgbValues = hexCode.match(/\d+/g);
+                const hexConverted = rgbToHex(rgbValues[0], rgbValues[1], rgbValues[2]);
+
+                document.getElementById("result").innerText = `Hex Code: ${hexConverted}`;
+                document.getElementById("color-box").style.backgroundColor = hexConverted;
+                document.getElementById("color-box").style.display = "block";
+            } else {
+                document.getElementById("result").innerText = "Error: Color not found";
+                document.getElementById("color-box").style.display = "none";
+            }
+        }
+
+        function rgbToHex(r, g, b) {
+            return "#" + [r, g, b].map(x => {
+                const hex = parseInt(x).toString(16);
+                return hex.length === 1 ? "0" + hex : hex;
+            }).join("");
+        }
+    </script>
+
+</body>
+</html>
